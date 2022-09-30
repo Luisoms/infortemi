@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Tablas{% endblock %}
+{% block links %}
+<link href="{% static 'DataTables/datatables.min.css' %}" rel="stylesheet" />
+{% endblock %}
+{% block content %}
+<main>
+    <div class="container-fluid px-4">
+        <h1 class="mt-4">Votantes registrados</h1>
+        <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item"><a href="{% url 'inicio' %}">Dashboard</a></li>
+            <li class="breadcrumb-item active">Tables</li>
+        </ol>
+        <div class="card mb-4">
+            <div class="card-header row">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <i class="fas fa-table me-1"></i>Votatantes
+                    </div>
+                    <a class="btn btn-primary" href="{% url 'agregar_votantes' %}">Agregar</a>
+                </div>
+            </div>
+            <div class="card-body table-responsive">
+                <table class="table table-hover">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Cédula</th>
+                            <th>Telefono</th>
+                            <th>Centro de Votación</th>
+                            {% if user.is_admin %}
+                            <th>Acciones</th>
+                            {% endif %}
+                        </tr>
+                    </thead>
+                    <!-- <tfoot>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Cédula</th>
+                            <th>Dirigente</th>
+                            <th>Centro de Votación</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </tfoot> -->
+                    <tbody>
+                        {% for votante in votantes %}
+                            <tr>
+                                <td>{{ votante.nombre }}</td>
+                                <td>{{ votante.cedula }}</td>
+                                <td>{{ votante.telefono }}</td>
+                                <td>{{ votante.centro_votacion.cede }}</td>
+                                {% if user.is_admin %}
+                                <td class="d-flex justify-content-evenly">
+                                    <a class="btn btn-info btn-sm" href="{% url 'editar_votante' votante.id %}"><i class="fas fa-edit text-white"></i></a>
+                                    <a class="btn btn-danger btn-sm" href="{% url 'eliminar_votante' votante.id %}"><i class="fas fa-trash text-white"></i></a>
+                                </td>
+                                {% endif %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

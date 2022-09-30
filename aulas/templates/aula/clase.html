@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Clase {{ clase.nombre }}{% endblock %}
+{% block content %}
+<main>
+    <div class="container-fluid px-4">
+        <h1 class="mt-4">Clase {{ clase.nombre }}</h1>
+        <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item"><a href="{% url 'inicio' %}">Aula</a></li>
+            <li class="breadcrumb-item active">clase {{ clase.id }}</li>
+        </ol>
+        <div class="card mb-4">
+            <div class="card-header row">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <i class="fas fa-table me-1"></i>Clase {{ clase.id }}
+                    </div>
+                    <a class="btn btn-primary" href="{% url 'inicio' %}">inicio</a>
+                </div>
+            </div>
+        </div>
+        {% if clase.video %}
+        <div class="row">
+            <div class="col-12">
+                <video width="800" height="600" controls>
+                    <source src="{{ clase.video.url }}" type="video/mp4">
+                </video>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</main>
+{% endblock %}
