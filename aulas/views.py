@@ -32,19 +32,33 @@ def registro(request):
 @login_required(redirect_field_name='')
 def clase(request, id):
     clase = get_object_or_404(Clase, id=id)
+    nivel = Nivel.objects.filter(clases=clase)
+    
+
     
     ctx = {
-        "form": ClaseForm(instance=clase),
-        "clase": clase
+        #"form": ClaseForm(instance=clase),
+        "clase": clase,
+        "nivel": nivel[0],
     }
     
-    if request.method == "POST":
-        data = ClaseForm(data=request.POST, instance=clase)
-        if data.is_valid():
-            data.save()
-            messages.info(request, "Clase editada correctamente")
-            return redirect(to="clase")
+    if clase.id > 1:
+        clasePrevia = clase.id - 1
+        ctx["clasePrevia"] = clasePrevia
+        
+    if clase != nivel.last:
+        clasePosterior = clase.id + 1
+        ctx["clasePosterior"] = clasePosterior
+        
+    if request.POST:
+        
+        usuario = Usuario.objects.get(id=request.user.id)
+        
+        if request.POST.dict()["is_completed"] == 1:
+            usuario.clases_vistas.add(clase)
+            messages.info(request, "Completada 😄")
         else:
-            ctx["form"] = data
+            usuario.clases_vistas.remove(clase)
+            messages.info(request, "No completada 😔")
         
     return render(request, "aula/clase.html", ctx)

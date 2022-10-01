@@ -4,13 +4,14 @@ from django.contrib.auth.models import (BaseUserManager, AbstractUser)
 # Create your models here.
 
 class Clase(models.Model):
-    def clase_directory_path(self, filename):
+    # def clase_directory_path(self, filename):
         # Se subira en MEDIA_ROOT / video/<id_nivel>/<filename>
-        return f'videos/{self.codigo}/({self.nombre})-{filename}'
+        # return f'videos/{self.codigo}/({self.nombre})-{filename}'
     
+    #video=models.FileField(upload_to=clase_directory_path,null=True,blank=True)
     codigo=models.CharField(max_length=50,unique=True)
     nombre=models.CharField(max_length=50)
-    video=models.FileField(upload_to=clase_directory_path,null=True,blank=True)
+    video=models.CharField(max_length=250,null=True,blank=True)
     
     class Meta:
         ordering = ["id"]
@@ -22,7 +23,7 @@ class Clase(models.Model):
 
 class Nivel(models.Model):
     nombre=models.CharField(max_length=50)
-    clases=models.ManyToManyField(Clase,verbose_name="Clases")
+    clases=models.ManyToManyField(Clase,verbose_name="Clases",default="Ninguna",blank=True)
     
     class Meta:
         ordering = ["id"]
@@ -69,6 +70,8 @@ class Usuario(AbstractUser):
     direccion=models.TextField(verbose_name="Dirección",max_length=500,null=True,blank=True)
     niveles=models.ManyToManyField(Nivel,verbose_name="Niveles")
     fecha_registro=models.DateField(verbose_name="Fecha de registro",auto_now=True)
+    
+    clases_vistas=models.ManyToManyField(Clase,verbose_name="Clases vistas",default="Ninguna",blank=True)
 
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)

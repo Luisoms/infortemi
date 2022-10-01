@@ -62,7 +62,7 @@
                                     {% for c in n.clases.all %}
                                     <div class="collapse" id="collapse{{ n.nombre|title }}" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                         <nav class="sb-sidenav-menu-nested nav">
-                                            <a class="nav-link" href="{% url 'clase' c.id %}">{{ c.nombre }}</a>
+                                            <a class="nav-link" href="{% url 'clase' c.id %}">{{ c.pk }} - {{ c.nombre }}</a>
                                         </nav>
                                     </div>
                                     {% endfor %}

@@ -4,30 +4,84 @@
 {% block content %}
 <main>
     <div class="container-fluid px-4">
-        <h1 class="mt-4">Clase {{ clase.nombre }}</h1>
+        <h1 class="mt-4">{{ clase.nombre|capfirst }}</h1>
         <ol class="breadcrumb mb-4">
             <li class="breadcrumb-item"><a href="{% url 'inicio' %}">Aula</a></li>
-            <li class="breadcrumb-item active">clase {{ clase.id }}</li>
+            <li class="breadcrumb-item active">{{ nivel.nombre }}</li>
         </ol>
         <div class="card mb-4">
             <div class="card-header row">
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
-                        <i class="fas fa-table me-1"></i>Clase {{ clase.id }}
+                        <i class="fas fa-table me-2"></i>Clase {{ clase.id }}
                     </div>
-                    <a class="btn btn-primary" href="{% url 'inicio' %}">inicio</a>
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        {% if clase in user.clases_vistas.all %}
+                        <input type="hidden" value="0" name="is_completed"/>
+                        <button class="btn btn-success" type="submit">
+                            <i class="fa fa-circle-check me-1"></i>
+                            Terminada
+                        </button>
+                        {% else %}
+                        <input type="hidden" value="1" name="is_completed"/>
+                        <button class="btn btn-outline-secondary" type="submit" value="1">
+                            <i class="fa-regular fa-circle me-1"></i>
+                            No terminada
+                        </button>
+                        {% endif %}
+                    </form>
                 </div>
             </div>
-        </div>
+        </div>        
         {% if clase.video %}
         <div class="row">
-            <div class="col-12">
+            <div class="col-12 d-flex justify-content-center align-items-center bg-dark">
+                {% comment %}
                 <video width="800" height="600" controls>
-                    <source src="{{ clase.video.url }}" type="video/mp4">
+                    <source src="{{ clase.video.url }} " type="video/mp4">                    
                 </video>
+                {% endcomment %}
+                <iframe width="560" height="315" src="{{ clase.video }}"
+                title="{{ clase.nombre|title }}" frameborder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+        </div>
+        {% else %}
+        <div class="row">
+            <div class="col-12 d-flex justify-content-center align-items-center bg-dark">
+                <img width="410" height="250" src="{% static 'images/default.jpg' %}" alt="Video - clase {{ clase.nombre|title }}"/>
             </div>
         </div>
         {% endif %}
+        <div class="row d-flex justify-content-center align-items-center flex-row">
+            <div class="col-3">
+                {% if clase.id is 1 %}
+                <a href="#" class="btn btn-lg btn-outline-secondary disabled">
+                {% else %}
+                <a href="{% url 'clase' clasePrevia %}" class="btn btn-lg btn-primary">
+                {% endif %}
+                <i class="fa fa-arrow-left"></i></a>
+            </div>
+            <div class="col-6 mt-4 flex-column">
+                <h3 class="h3">{{ clase.nombre|capfirst }}</h3>
+                <p class="text-start">
+                    {% lorem 2 p random %}
+                </p>
+                <h5 class="h5">{% lorem 2 w random %}</h5>
+                <p class="text-start">
+                    {% lorem 1 p random %}
+                </p>
+            </div>
+            <div class="col-3 d-flex justify-content-end">
+                {% if clase.id == nivel.clases.last.id %}
+                <a href="#" class="btn btn-lg btn-outline-secondary disabled">
+                {% else %}
+                <a href="{% url 'clase' clasePosterior %}" class="btn btn-lg btn-primary">
+                {% endif %}
+                <i class="fa fa-arrow-right"></i></a>
+            </div>
+        </div>
     </div>
 </main>
 {% endblock %}
