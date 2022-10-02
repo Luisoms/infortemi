@@ -18,14 +18,14 @@
                     <form action="" method="post">
                         {% csrf_token %}
                         {% if clase in user.clases_vistas.all %}
-                        <input type="hidden" value="0" name="is_completed"/>
+                        <input type="hidden" value="no" name="is_completed"/>
                         <button class="btn btn-success" type="submit">
                             <i class="fa fa-circle-check me-1"></i>
                             Terminada
                         </button>
                         {% else %}
-                        <input type="hidden" value="1" name="is_completed"/>
-                        <button class="btn btn-outline-secondary" type="submit" value="1">
+                        <input type="hidden" value="yes" name="is_completed"/>
+                        <button class="btn btn-outline-secondary" type="submit">
                             <i class="fa-regular fa-circle me-1"></i>
                             No terminada
                         </button>
@@ -56,7 +56,7 @@
         {% endif %}
         <div class="row d-flex justify-content-center align-items-center flex-row">
             <div class="col-3">
-                {% if clase.id is 1 %}
+                {% if clase.id is nivel.clases.first.id %}
                 <a href="#" class="btn btn-lg btn-outline-secondary disabled">
                 {% else %}
                 <a href="{% url 'clase' clasePrevia %}" class="btn btn-lg btn-primary">
@@ -74,7 +74,7 @@
                 </p>
             </div>
             <div class="col-3 d-flex justify-content-end">
-                {% if clase.id == nivel.clases.last.id %}
+                {% if clase.id is nivel.clases.last.id %}
                 <a href="#" class="btn btn-lg btn-outline-secondary disabled">
                 {% else %}
                 <a href="{% url 'clase' clasePosterior %}" class="btn btn-lg btn-primary">

@@ -9,7 +9,10 @@ from .forms import ClaseForm, CustomCreationForm
     INICIO
 """
 @login_required(redirect_field_name='')
-def inicio(request):            
+def inicio(request):
+    usuario = request.user
+    messages.info(request, f"Ultima conexción: {usuario.last_login.strftime('%a %d de %m, a las %H:%M')}")
+               
     return render(request, "index.html")
 
 """
@@ -54,7 +57,7 @@ def clase(request, id):
         
         usuario = Usuario.objects.get(id=request.user.id)
         
-        if request.POST.dict()["is_completed"] == 1:
+        if request.POST.dict()["is_completed"] == "yes":
             usuario.clases_vistas.add(clase)
             messages.info(request, "Completada 😄")
         else:
