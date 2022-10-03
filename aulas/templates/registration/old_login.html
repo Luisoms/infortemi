@@ -1,0 +1,46 @@
+{% extends "registration/autenticacion.html" %}
+{% load static %}
+{% block title %}Ingresar{% endblock %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+    
+    {% comment %} <div id="layoutAuthentication">
+        <div id="layoutAuthentication_content">
+            <main>
+                <div class="container">
+                    <div class="row vh-100 d-flex justify-content-center align-items-center">
+                        <div class="col-lg-5">
+                            <div class="card shadow-lg border-0 rounded-lg mt-5">
+                                <div class="card-header"><h3 class="text-center font-weight-light my-4">Autenticación</h3></div>
+                                <div class="card-body">
+                                    <form class="d-flex flex-column align-items-center justify-content-between" action="" method="post">
+                                        {% csrf_token %}
+                                        {{ form | crispy }}
+                                                <input class="form-control" id="inputEmail" type="email" placeholder="name@example.com" />
+                                                <label for="inputEmail">Correo</label>
+                                            <div class="col-12 form-floating mb-3">
+                                                <input class="form-control" id="inputPassword" type="password" placeholder="Password" />
+                                                <label for="inputPassword">Contraseña</label>
+                                            </div>
+                                            <div class="form-check mb-3">
+                                                <input class="form-check-input" id="inputRememberPassword" type="checkbox" value="" />
+                                                <label class="form-check-label" for="inputRememberPassword">Recordar contraseña</label>
+                                            </div>
+                                            <a class="small" href="password.html">¿Olvido la contraseña?</a>
+                                        <div class="col-12 d-flex align-items-center justify-content-center my-4">
+                                            <button type="submit" value="ingresar" class="w-50 btn btn-lg btn-primary">Accesar</button>
+                                        </div>
+                                        <a href="#" class="link-primary">Accesar</a>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div> 
+    {% endcomment %}
+{% endblock %}
