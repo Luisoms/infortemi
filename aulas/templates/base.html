@@ -80,7 +80,7 @@
                             {% endif %}
                             <div class="sb-sidenav-menu-heading">Opciones</div>
                             {% if user.is_admin %}
-                            <a class="nav-link" href="{% url 'logout' %}">
+                            <a class="nav-link" href="/admin/">
                                 <div class="sb-nav-link-icon"><i class="fas fa-gear"></i></div>
                                 Administración
                             </a>
@@ -96,7 +96,7 @@
                     </div>
                 </nav>
             </div>
-            <div id="layoutSidenav_content">
+            <div id="layoutSidenav_content" clase="p-4">
                 {% if messages %}
                     {% for m in messages %}
                         <div class="toast-container position-fixed top-20 end-0 p-3">

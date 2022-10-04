@@ -129,9 +129,9 @@
 <script src="{% static 'js/caleandar.min.js' %}" type="text/javascript"></script>
 <script type="text/javascript">
     let events = [
-        {'Date': new Date(2022, 9, 1), 'Title': 'Clase I El ministro y el ministerio', 'Link': '{% url "clase" 1 %}'},
-        {'Date': new Date(2022, 9, 2), 'Title': 'Examen final', 'Link': '#'},
-        {'Date': new Date(2022, 9, 3), 'Title': 'Es tu aniversario!', 'Link': function(){alert('Felicidades!')}},
+        {'Date': new Date(2022, 9, 2), 'Title': 'Clase I El ministro y el ministerio', 'Link': '{% url "clase" 1 %}'},
+        {'Date': new Date(2022, 9, 3), 'Title': 'Examen final', 'Link': '#'},
+        {'Date': new Date(2022, 9, 5), 'Title': 'Es tu aniversario!', 'Link': function(){alert('Felicidades!')}},
     ];
     let settings = {}
     const caleandarEl = caleandar(document.getElementById('caleandar'), events, settings);
