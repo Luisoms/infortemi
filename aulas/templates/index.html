@@ -5,16 +5,16 @@
 <link href="{% static 'css/theme2.css' %}" rel="stylesheet" />
 {% endblock %}
 {% block content %}
-<main id="layoutAuthentication_content">
-    <div class="container-fluid px-4">
+<main>
+    <div class="container-fluid">
         <h1 class="mt-4">Aula virtual</h1>
         <ol class="breadcrumb mb-4">
             <li class="breadcrumb-item active">Resumen</li>
         </ol>
         <div class="row">
             <div class="col-xl-3 col-md-6">
-                <div class="card bg-primary text-white mb-4">
-                    <div class="card-body">Niveles <span class="fs-5 fw-semibold ms-2">1/6</span></div>
+                <div class="card bg-primary text-white mb-4 shadow">
+                    <div class="card-body">Niveles <span class="fs-5 fw-semibold ms-2">{{ user.niveles.all|length }}</span></div>
                     <div class="card-footer d-flex align-items-center justify-content-between">
                         <a class="small text-white stretched-link" href="#">Ver Detalles</a>
                         <div class="small text-white"><i class="fas fa-angle-right"></i></div>
@@ -22,7 +22,7 @@
                 </div>
             </div>
             <div class="col-xl-3 col-md-6">
-                <div class="card bg-warning text-white mb-4">
+                <div class="card bg-warning text-white mb-4 shadow">
                     <div class="card-body">Clases pendientes <span class="fs-5 fw-semibold ms-2">5</span></div>
                     <div class="card-footer d-flex align-items-center justify-content-between">
                         <a class="small text-white stretched-link" href="#">Ver Detalles</a>
@@ -31,8 +31,8 @@
                 </div>
             </div>
             <div class="col-xl-3 col-md-6">
-                <div class="card bg-success text-white mb-4">
-                    <div class="card-body">Clases completadas <span class="fs-5 fw-semibold ms-2">1</span></div>
+                <div class="card bg-success text-white mb-4 shadow">
+                    <div class="card-body">Clases completadas <span class="fs-5 fw-semibold ms-2">{{ user.clases_vistas.all|length }}</span></div>
                     <div class="card-footer d-flex align-items-center justify-content-between">
                         <a class="small text-white stretched-link" href="#">Ver Detalles</a>
                         <div class="small text-white"><i class="fas fa-angle-right"></i></div>
@@ -40,7 +40,7 @@
                 </div>
             </div>
             <div class="col-xl-3 col-md-6">
-                <div class="card bg-danger text-white mb-4">
+                <div class="card bg-danger text-white mb-4 shadow">
                     <div class="card-body">Examenes pendientes <span class="fs-5 fw-semibold ms-2">5</span></div>
                     <div class="card-footer d-flex align-items-center justify-content-between">
                         <a class="small text-white stretched-link" href="#">Ver Detalles</a>
@@ -56,7 +56,7 @@
                         <i class="fas fa-chart-area me-1"></i>
                         Evaluaciones
                     </div>
-                    <div class="card-body"><canvas id="areaChart" width="100%" height="75%"></canvas></div>
+                    <div class="card-body chart shadow-sm"><canvas id="areaChart" width="100%" height="100%"></canvas></div>
                 </div>
             </div>
             <div class="col-xl-4">
@@ -65,7 +65,7 @@
                         <i class="fas fa-chart-bar me-1"></i>
                         Niveles
                     </div>
-                    <div class="card-body"><canvas id="barChart" width="100%" height="75%"></canvas></div>
+                    <div class="card-body chart shadow-sm"><canvas id="barChart" width="100%" height="100%"></canvas></div>
                 </div>
             </div>
             <div class="col-xl-4">
@@ -74,7 +74,7 @@
                         <i class="fas fa-calendar me-1"></i>
                         Actividades
                     </div>
-                    <div id="caleandar" class="card-body">
+                    <div id="caleandar" class="card-body calendar shadow-sm">
                     </div>
                 </div>
             </div>
@@ -144,7 +144,7 @@
     const graficoLineal = new Chart(ctx, {
       type: 'line',
       data: {
-        labels: ['Sep 28', 'Sep 29', 'Sep 30'],
+        labels: ['Oct 1', 'Oct 2', 'Oct 3'],
         datasets: [{
           label: "Calificaciones",
           lineTension: 0.3,
@@ -200,7 +200,7 @@
             labels: ['Prop', 'Shekinah', 'Shaddai', 'Kairós', 'Rhema', 'Espe'],
             datasets: [{
                 label: 'Porcentaje de nivel',
-                data: [100, 80, 20, 0, 0, 0, 0],
+                data: [100, 80, 20, 0, 70, 10, 40],
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.2)',
                     'rgba(255, 159, 64, 0.2)',

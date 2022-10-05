@@ -11377,6 +11377,7 @@ body {
     display: none;
   }
 }
+
 .sb-nav-fixed .sb-topnav {
   z-index: 1039;
 }
@@ -11394,6 +11395,12 @@ body {
 .sb-nav-fixed #layoutSidenav #layoutSidenav_content {
   padding: 0 50px 0 275px;
   top: 56px;
+}
+
+@media (max-width: 992px) {
+  .sb-nav-fixed #layoutSidenav #layoutSidenav_content {
+    padding: 0 20px 0 245px;
+  }  
 }
 
 #layoutError {
@@ -11536,4 +11543,57 @@ body {
 }
 .sb-sidenav-light .sb-sidenav-footer {
   background-color: #e9ecef;
+}
+
+.chart, .calendar {
+  overflow: hidden;
+  width: 100%;
+  height: 380px;
+}
+
+@media (max-width: 1323px) {
+  .calendar, .chart {
+    font-size: .9rem;
+    height: 300px;
+  }
+  .cld-day {
+    width: 13.28%;
+  }  
+  .cld-number {
+    font-size: .7rem;
+    padding: 7px !important;
+  }
+}
+
+@media (max-width: 1200px) {
+  .calendar, .chart {
+    font-size: unset;
+    height: 350px;
+  }
+  .cld-day {
+    width: 14.28%;
+  }  
+  .cld-number {
+    font-size: unset;
+    padding: unset;
+  }
+}
+
+@media (max-width: 372px) {
+  .calendar, .chart {
+    font-size: .8rem;
+    height: 100%;
+  }  
+}
+
+@media (max-width: 348px) {
+  .calendar {
+    font-size: .7rem;
+  }  
+}
+
+#areaChart,
+#barChart {
+  min-height: 100%;
+  max-height: 100%;
 }

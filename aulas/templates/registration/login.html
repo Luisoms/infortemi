@@ -86,13 +86,13 @@
 
         <main class="form-signin m-auto card shadow bg-body rounded">
           <div class="row d-flex justify-content-center">
-            <img class="w-50 text-center" src="{% static 'images/logo/icono.png' %}" alt="Logo - Infortemi"/>
+            <img class="logo-png text-center" src="{% static 'images/logo/icono.png' %}" alt="Logo - Infortemi"/>
             <h3 class="text-center fw-bold my-4">Infortemi Aulas</h3>
           </div>
           <form action="" method="post">
               {% csrf_token %}
               {{ form | crispy }}
-              <button class="w-100 btn btn-lg bg-black text-white mb-4" value="ingresar" type="submit">Acceder</button>
+              <button class="w-100 btn btn-lg bg-black text-white mt-2 mb-4" value="ingresar" type="submit">Acceder</button>
               <a href="https://infortemi.com/wp/" class="d-block link-secondary text-center">Página principal</a>
           </form>
         </main>

@@ -25,7 +25,7 @@ SECRET_KEY = os.environ.get('S3_KEY', default='django-insecure-9s@rf(jzx#yt84qsu
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = 'RENDER' not in os.environ
-DEBUG = False
+DEBUG = 'NOT_DEBUG' not in os.environ
 
 ALLOWED_HOSTS = ['127.0.0.1', 'infortemi.herokuapp.com']
 
