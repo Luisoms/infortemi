@@ -9,17 +9,16 @@
         <meta name="author" content="Infortemi" />
         <title>{% block title %}{% endblock %} - Infortemi aulas</title>
         <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
-        <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" />
         <link href="{% static 'fontawesome/css/all.min.css' %}" rel="stylesheet" />
         {% block links %}{% endblock %}
         <script src="{% static 'fontawesome/js/all.min.js' %}"></script>
     </head>
-    <body class="sb-nav-fixed">
-        <nav class="sb-topnav navbar navbar-expand text-white bg-black">
+    <body class="sb-nav-fixed sb-nav-{% if user.tema == 'dark' %}dark{% else %}light{% endif %}">
+        <nav class="sb-topnav navbar navbar-expand bg-dark">
             <!-- Navbar Brand-->
             <div class="navbar-brand ps-3 d-flex align-items-center">
                 <img width="28" class="me-2 text-center" src="{% static 'images/logo/icono.png' %}" alt="Logo - Infortemi"/>
-                <a class="text-white fw-bold text-decoration-none" href="/">INFORTEMI</a>
+                <a class="text-white fw-bold text-decoration-none" href="{% url 'inicio' %}">INFORTEMI</a>
             </div>
             <!-- Sidebar Toggle-->
             <button class="btn btn-link text-white btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
@@ -34,41 +33,40 @@
             <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle text-white" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-{% if user.tema == 'dark' %}dark{% else %}light{% endif %}" aria-labelledby="navbarDropdown">
                         <li><div class="dropdown-item disabled">{{ user.username|title }}</div></li>
                         <li><hr class="dropdown-divider" /></li>
-                        <li><a class="dropdown-item" href="#!">Opciones</a></li>
-                        {% comment %} <li><a class="dropdown-item" href="#!">Log de actividades</a></li> {% endcomment %}
-                        <li><a class="dropdown-item" href="{% url 'logout' %}">Salir</a></li>
+                        <li><a class="dropdown-item dropdown-item-{% if user.tema == 'dark' %}dark{% else %}light{% endif %} {% if request.path == '/opciones/' %}active{% endif %}" href="{% url 'opciones' %}">Opciones</a></li>
+                        <li><a class="dropdown-item dropdown-item-{% if user.tema == 'dark' %}dark{% else %}light{% endif %}" href="{% url 'logout' %}">Salir</a></li>
                     </ul>
                 </li>
             </ul>
         </nav>
         <div id="layoutSidenav">
             <div id="layoutSidenav_nav">
-                <nav class="sb-sidenav accordion sb-sidenav-light bg-white shadow-lg" id="sidenavAccordion">
+                <nav class="sb-sidenav accordion sb-sidenav-{% if user.tema == 'dark' %}dark{% else %}light{% endif %} shadow-lg" id="sidenavAccordion">
                     <div class="sb-sidenav-menu">
                         <div class="nav">
                             <div class="sb-sidenav-menu-heading">menú</div>
-                            <a class="nav-link" href="/">
+                            <a class="nav-link {% if request.path == '/' %}active{% endif %}" href="{% url 'inicio' %}">
                                 <div class="sb-nav-link-icon"><i class="fas fa-home"></i></div>
                                 Inicio
                             </a>
                             {% if user.niveles %}
                             <div class="sb-sidenav-menu-heading">Niveles</div>
                                 {% for n in user.niveles.all %}
-                                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapse{{ n.nombre|title }}" aria-expanded="false" aria-controls="collapse{{ n.nombre|title }}">
+                                    <a class="nav-link {% if nivel.id == n.id %}collapsed{% endif %}" href="#" data-bs-toggle="collapse" data-bs-target="#collapse{{ n.nombre|title }}" aria-expanded="{% if nivel.id == n.id %}true{% else %}false{% endif %}" aria-controls="collapse{{ n.nombre|title }}">
                                         {{ n.nombre|title }}
                                         <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                                     </a>
                                     {% for c in n.clases.all %}
-                                    <div class="collapse" id="collapse{{ n.nombre|title }}" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                                    <div class="collapse {% if nivel.id == n.id %}show{% endif %}" id="collapse{{ n.nombre|title }}" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                         <nav class="sb-sidenav-menu-nested nav">
-                                            <a class="nav-link" href="{% url 'clase' c.id %}">{{ c.pk }} - {{ c.nombre }}</a>
+                                            <a class="nav-link {% if c.id|capfirst in request.path %}active-collapse{% endif %}" href="{% url 'clase' c.id %}">{{ c.id }} - {{ c.nombre }}</a>
                                         </nav>
                                     </div>
                                     {% endfor %}
-                                    <div class="collapse" id="collapse{{ n.nombre|title }}" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                                    <div class="collapse {% if nivel.id == n.id %}show{% endif %}" id="collapse{{ n.nombre|title }}" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                         <nav class="sb-sidenav-menu-nested nav">
                                             <a class="nav-link" href="#">
                                                 <div class="sb-nav-link-icon"><i class="fas fa-file-text"></i></div>
@@ -91,8 +89,8 @@
                             </a>
                         </div>
                     </div>
-                    <div class="sb-sidenav-footer bg-warning fs-6 text-muted">
-                        v0.0.8 (En desarrollo)
+                    <div class="sb-sidenav-footer fs-6 text-muted text-center">
+                        v0.1.1 (En desarrollo)
                     </div>
                 </nav>
             </div>
@@ -101,7 +99,7 @@
                     {% for m in messages %}
                         <div class="toast-container position-fixed top-20 end-0 p-3">
                             <div id="liveToast" 
-                            class="toast align-items-center border-0 text-bg-{{ m.tags }}" role="alert" aria-live="assertive" aria-atomic="true">
+                            class="toast align-items-center border-0 text-white bg-{{ m.tags }}" role="alert" aria-live="assertive" aria-atomic="true">
                                 <div class="d-flex">
                                     <div class="toast-body">
                                         {{ m }}
@@ -113,7 +111,7 @@
                     {% endfor %}
                 {% endif %}
                 {% block content %}{% endblock %}
-                <footer class="py-4 bg-light mt-auto">
+                <footer class="py-4 mt-auto {% if user.tema == 'dark' %}bg-gray{% else %}bg-light{% endif %}">
                     <div class="container-fluid px-4">
                         <div class="d-flex align-items-center justify-content-between small">
                             <div class="text-muted">Copyright &copy; Infortemi 2022</div>

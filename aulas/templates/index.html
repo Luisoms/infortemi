@@ -9,8 +9,9 @@
     <div class="container-fluid">
         <h1 class="mt-4">Aula virtual</h1>
         <ol class="breadcrumb mb-4">
-            <li class="breadcrumb-item active">Resumen</li>
+            <li class="breadcrumb-item text-secondary">Resumen</li>
         </ol>
+        
         <div class="row">
             <div class="col-xl-3 col-md-6">
                 <div class="card bg-primary text-white mb-4 shadow">
@@ -49,9 +50,10 @@
                 </div>
             </div>
         </div>
+
         <div class="row">
             <div class="col-xl-4">
-                <div class="card mb-4">
+                <div class="card mb-4 shadow-sm {% if user.tema == 'dark' %}bg-dark{% endif %}">
                     <div class="card-header">
                         <i class="fas fa-chart-area me-1"></i>
                         Evaluaciones
@@ -60,7 +62,7 @@
                 </div>
             </div>
             <div class="col-xl-4">
-                <div class="card mb-4">
+                <div class="card mb-4 shadow-sm {% if user.tema == 'dark' %}bg-dark{% endif %}">
                     <div class="card-header">
                         <i class="fas fa-chart-bar me-1"></i>
                         Niveles
@@ -69,7 +71,7 @@
                 </div>
             </div>
             <div class="col-xl-4">
-                <div class="card mb-4">
+                <div class="card mb-4 shadow-sm {% if user.tema == 'dark' %}bg-dark{% endif %}">
                     <div class="card-header">
                         <i class="fas fa-calendar me-1"></i>
                         Actividades
@@ -79,13 +81,14 @@
                 </div>
             </div>
         </div>
-        <div class="card mb-4">
+
+        <div class="card mb-4 shadow {% if user.tema == 'dark' %}bg-dark{% endif %}">
             <div class="card-header">
                 <i class="fas fa-file-text me-1"></i>
                 Examenes
             </div>
             <div class="card-body table-responsive">
-                <table id="datatableVotantes" class="table table-hover">
+                <table id="datatableVotantes" class="table table-hover {% if user.tema == 'dark' %}table-dark{% endif %}">
                     <thead class="table-dark">
                         <tr>
                             <th>Titulo</th>
@@ -104,19 +107,19 @@
                             <td>Examen de 01</td>
                             <td>Propedéutico - clase 01</td>
                             <td>Nivelación/Escrito</td>
-                            <td style="text-align:center;" class="text-bg-success">90%</td>
+                            <td style="text-align:center;" class="text-white bg-success">90%</td>
                         </tr>
                         <tr>
                             <td>Examen de 02</td>
                             <td>Propedéutico - clase 02</td>
                             <td>General/Escrito</td>
-                            <td style="text-align:center;" class="text-bg-danger">24%</td>
+                            <td style="text-align:center;" class="text-white bg-danger">24%</td>
                         </tr>
                         <tr>
                             <td>Examen de 03</td>
                             <td>Propedéutico - clase 03</td>
                             <td>General/Escrito</td>
-                            <td style="text-align:center;" class="text-bg-warning">Pendiente</td>
+                            <td style="text-align:center;" class="text-white bg-warning">Pendiente</td>
                         </tr>
                     </tbody>
                 </table>
@@ -128,6 +131,7 @@
 {% block scripts %}
 <script src="{% static 'js/caleandar.min.js' %}" type="text/javascript"></script>
 <script type="text/javascript">
+    {% if user.events %}{% endif %}
     let events = [
         {'Date': new Date(2022, 9, 2), 'Title': 'Clase I El ministro y el ministerio', 'Link': '{% url "clase" 1 %}'},
         {'Date': new Date(2022, 9, 3), 'Title': 'Examen final', 'Link': '#'},

@@ -8,6 +8,9 @@ urlpatterns = [
     #2 INICIO
     path('', views.inicio, name="inicio"),
     
+    #2 OPCIONES
+    path('opciones/', views.opciones, name="opciones"),
+    
     #2 AULAS URLS
     path('clase/<id>/', views.clase, name="clase"),
 ]

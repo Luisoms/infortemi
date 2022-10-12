@@ -64,6 +64,10 @@ class UsuarioManager(BaseUserManager):
         return user
 
 class Usuario(AbstractUser):
+    TEMA = [
+        ("light", "light"),
+        ("dark", "dark"),
+    ]
      
     username=models.CharField(verbose_name="Usuario",max_length=25,unique=True)
     telefono=models.CharField(verbose_name="Teléfono",max_length=25,null=True,blank=True)
@@ -72,6 +76,8 @@ class Usuario(AbstractUser):
     fecha_registro=models.DateField(verbose_name="Fecha de registro",auto_now=True)
     
     clases_vistas=models.ManyToManyField(Clase,verbose_name="Clases vistas",default="Ninguna",blank=True)
+    
+    tema = models.CharField(max_length=10,choices=TEMA,default="light")
 
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)

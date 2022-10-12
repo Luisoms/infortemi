@@ -6,16 +6,6 @@ from .models import Usuario, Nivel, Clase
 from .forms import ClaseForm, CustomCreationForm
 
 """
-    INICIO
-"""
-@login_required(redirect_field_name='')
-def inicio(request):
-    usuario = request.user
-    messages.info(request, f"Ultima conexción: {usuario.last_login.strftime('%a %d de %m, a las %H:%M')}")
-               
-    return render(request, "index.html")
-
-"""
     AUTENTICACIÓN
 """
 @login_required(redirect_field_name='')    
@@ -27,6 +17,26 @@ def registro(request):
         return render(request, "registration/registro.html", ctx)
     else:
         return redirect(to="inicio")
+    
+"""
+    INICIO
+"""
+@login_required(redirect_field_name='')
+def inicio(request):
+    usuario = request.user
+    messages.info(request, f"Ultima conexción: {usuario.last_login.strftime('%a %d de %m, a las %H:%M')}")
+               
+    return render(request, "index.html")
+
+@login_required(redirect_field_name='')
+def opciones(request):
+    
+    if request.method == "POST":
+        value = request.POST['tema'] 
+        Usuario.objects.filter(id=request.user.id).update(tema=value)
+        return redirect(to="opciones")
+    
+    return render(request, "opciones.html")
 
 """
     AULA

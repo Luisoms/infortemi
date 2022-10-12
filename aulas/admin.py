@@ -70,6 +70,7 @@ class UserAdmin(BaseUserAdmin):
             'telefono',
             'direccion',
             'niveles',
+            'tema',
         )}),
         ('Aula', {'fields': ('clases_vistas', 'is_maestro')}),
         ('Permisos', {'fields': ('is_admin','is_active')}),
