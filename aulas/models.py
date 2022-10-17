@@ -1,29 +1,14 @@
+import imp
+from django.urls import reverse
 from django.db import models
+from django.template.defaultfilters import slugify 
 from django.contrib.auth.models import (BaseUserManager, AbstractUser)
 
 # Create your models here.
 
-class Clase(models.Model):
-    # def clase_directory_path(self, filename):
-        # Se subira en MEDIA_ROOT / video/<id_nivel>/<filename>
-        # return f'videos/{self.codigo}/({self.nombre})-{filename}'
-    
-    #video=models.FileField(upload_to=clase_directory_path,null=True,blank=True)
-    codigo=models.CharField(max_length=50,unique=True)
-    nombre=models.CharField(max_length=50)
-    video=models.CharField(max_length=250,null=True,blank=True)
-    
-    class Meta:
-        ordering = ["id"]
-        verbose_name = "clase"
-        verbose_name_plural = "clases"
-    
-    def __str__(self):
-        return self.nombre
-
 class Nivel(models.Model):
-    nombre=models.CharField(max_length=50)
-    clases=models.ManyToManyField(Clase,verbose_name="Clases",default="Ninguna",blank=True)
+    nombre=models.CharField(max_length=50,null=False,unique=True)
+    slug=models.SlugField(verbose_name="Indicador URL",null=False,unique=True)
     
     class Meta:
         ordering = ["id"]
@@ -32,6 +17,41 @@ class Nivel(models.Model):
     
     def __str__(self):
         return self.nombre
+    
+    def get_absolute_url(self):
+        return reverse("clase", kwargs={"slug": self.slug})
+    
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.nombre)
+        return super().save(*args, **kwargs)
+    
+
+class Clase(models.Model):
+    def clase_directory_path(self, filename):
+        #4 Se subira en MEDIA_ROOT/material/<id_nivel>/<nombre>/<filename>
+        return f"material/{self.pk}/{self.titulo}/{filename}"
+    
+    titulo=models.CharField(verbose_name="Título",max_length=50,null=False,unique=True)
+    p_general=models.TextField(verbose_name="Propósito general",null=True,blank=True)
+    p_especifico=models.TextField(verbose_name="Propósito específico",null=True,blank=True)
+    material=models.FileField(upload_to=clase_directory_path,default="",null=True,blank=True)
+    video=models.FileField(upload_to=clase_directory_path,null=True,blank=True)
+    
+    nivel=models.ForeignKey(Nivel,models.CASCADE,related_name='clases',null=False)
+    STATUS = [
+        (False, "No disponible"),
+        (True, "Disponible"),
+    ]
+    is_available=models.BooleanField(verbose_name="Disponibilidad",choices=STATUS,default=False)
+    #3 video=models.CharField(max_length=250,null=True,blank=True)
+    
+    class Meta:
+        ordering = ["id"]
+        verbose_name = "clase"
+        verbose_name_plural = "clases"
+    
+    def __str__(self):
+        return self.titulo
 
 class UsuarioManager(BaseUserManager):
     def create_user(self, username, email, password=None):
@@ -64,24 +84,26 @@ class UsuarioManager(BaseUserManager):
         return user
 
 class Usuario(AbstractUser):
+    #4 DATA
+    username=models.CharField(verbose_name="Usuario",max_length=25,unique=True)
+    telefono=models.CharField(verbose_name="Teléfono",max_length=25,null=True,blank=True)
+    fecha_registro=models.DateField(verbose_name="Fecha de registro",auto_now=True)
+    
+    #4 AULA
+    niveles=models.ManyToManyField(Nivel,verbose_name="Niveles",related_name='usuarios',default="No asignado")
+    clases_vistas=models.ManyToManyField(Clase,verbose_name="Clases vistas",related_name='usuarios',default="Ninguna",blank=True)
+    
+    #4 ADMINISTRATION
+    is_active = models.BooleanField(default=True)
+    is_admin = models.BooleanField(default=False)
+    is_maestro = models.BooleanField(default=False)
+    
+    #4 STYLE
     TEMA = [
         ("light", "light"),
         ("dark", "dark"),
     ]
-     
-    username=models.CharField(verbose_name="Usuario",max_length=25,unique=True)
-    telefono=models.CharField(verbose_name="Teléfono",max_length=25,null=True,blank=True)
-    direccion=models.TextField(verbose_name="Dirección",max_length=500,null=True,blank=True)
-    niveles=models.ManyToManyField(Nivel,verbose_name="Niveles")
-    fecha_registro=models.DateField(verbose_name="Fecha de registro",auto_now=True)
-    
-    clases_vistas=models.ManyToManyField(Clase,verbose_name="Clases vistas",default="Ninguna",blank=True)
-    
     tema = models.CharField(max_length=10,choices=TEMA,default="light")
-
-    is_active = models.BooleanField(default=True)
-    is_admin = models.BooleanField(default=False)
-    is_maestro = models.BooleanField(default=False)
 
     objects = UsuarioManager()
 

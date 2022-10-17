@@ -5,6 +5,7 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 
 from .models import Usuario, Nivel, Clase
+from .forms import NivelForm, ClaseForm
 # Register your models here.
 
 class UserCreationForm(forms.ModelForm):
@@ -33,7 +34,6 @@ class UserCreationForm(forms.ModelForm):
             user.save()
         return user
 
-
 class UserChangeForm(forms.ModelForm):
     """A form for updating users. Includes all the fields on
     the user, but replaces the password field with admin's
@@ -51,16 +51,12 @@ class UserChangeForm(forms.ModelForm):
         # field does not have access to the initial value
         return self.initial["password"]
 
-
 class UserAdmin(BaseUserAdmin):
-    # The forms to add and change user instances
     form = UserChangeForm
     add_form = UserCreationForm
 
-    # The fields to be used in displaying the User model.
-    # These override the definitions on the base UserAdmin
-    # that reference specific fields on auth.User.
     list_display = ('username','email','is_admin')
+    list_editable = ('is_admin',)
     list_filter = ('is_admin',)
     fieldsets = (
         ('Datos de Acceso', {'fields': ('username','password','is_superuser')}),
@@ -68,28 +64,82 @@ class UserAdmin(BaseUserAdmin):
             'first_name',
             'last_name',
             'telefono',
-            'direccion',
-            'niveles',
+            'email',
             'tema',
         )}),
-        ('Aula', {'fields': ('clases_vistas', 'is_maestro')}),
-        ('Permisos', {'fields': ('is_admin','is_active')}),
+        ('Aula', {'fields': ('niveles','clases_vistas')}),
+        ('Permisos', {'fields': ('is_admin','is_maestro','is_active')}),
     )
-    # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin
-    # overrides get_fieldsets to use this attribute when creating a user.
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
             'fields': ('username', 'email', 'password1', 'password2'),
         }),
     )
-    search_fields = ('username',)
+    search_fields = ['username']
+    search_help_text = 'Busqueda por usuario'    
     ordering = ('username',)
-    filter_horizontal = ()
+    filter_horizontal = ('niveles', 'clases_vistas')
+
+class NivelAdmin(admin.ModelAdmin):    
+    list_display = ('nombre', 'slug')
+    list_display_links = ('nombre',)    
+    fieldsets = (
+        ('Información general',
+            {
+                'fields': (
+                    'nombre',
+                ),
+                'description': '<p style="margin:20px 0;">Datos sobre el Nivel</p>'
+            }
+        ),
+    )
+    add_fieldsets = (
+        (None, {
+            'classes': ('wide',),
+            'fields': ('nombre'),
+        }),
+    )
+    search_fields = ['nombre']
+    search_help_text = 'Busqueda por nombre'
+
+class ClaseAdmin(admin.ModelAdmin):
+    form = ClaseForm
+    
+    list_display = ('titulo', 'nivel', 'is_available')
+    list_display_links = ('titulo',)
+    list_editable = ('nivel','is_available')
+    
+    fieldsets = (
+        ('Información general',
+            {
+                'fields': (
+                    'titulo',
+                    'nivel',
+                    'is_available',
+                    'p_general',
+                    'p_especifico',
+                ),
+                'description': '<p style="margin:20px 0;">Información sobre la clase</p>'
+            }
+        ),
+        ('Archivos', {'fields': ('video', 'material')}),
+    )
+    add_fieldsets = (
+        (None, {
+            'classes': ('wide',),
+            'fields': ('titulo', 'p_general', 'p_espeficico', 'video', 'material','is_available'),
+        }),
+    )
+    radio_fields = {'is_available': admin.HORIZONTAL}
+    
+    search_fields = ['titulo']
+    search_help_text = 'Busqueda por título'
+    
 
 admin.site.register(Usuario, UserAdmin)
-admin.site.register(Nivel)
-admin.site.register(Clase)
+admin.site.register(Nivel, NivelAdmin)
+admin.site.register(Clase, ClaseAdmin)
 # ... and, since we're not using Django's built-in permissions,
 # unregister the Group model from admin.
 admin.site.unregister(Group)

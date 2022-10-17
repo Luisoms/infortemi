@@ -10,23 +10,28 @@ class CustomCreationForm(UserCreationForm):
             'first_name',
             'last_name',
             'username',
+            'email',
             'telefono',
-            'direccion',
             'niveles']
         
         widgets = {
-            "password1": forms.PasswordInput(),
-            "password2": forms.PasswordInput(),
+            'password1': forms.PasswordInput(),
+            'password2': forms.PasswordInput(),
         }
 
-class ClaseForm(forms.ModelForm):
-    
-    class Meta:
-        model = Clase
-        fields = ['nombre', 'video']
-        
 class NivelForm(forms.ModelForm):
     
     class Meta:
         model = Nivel
-        fields = ['nombre', 'clases']
+        fields = '__all__'
+        
+class ClaseForm(forms.ModelForm):
+    
+    class Meta:
+        model = Clase
+        fields = '__all__'
+        
+        widgets = {
+            'material': forms.ClearableFileInput(attrs={'multiple': True, 'required': False}),
+        }
+        

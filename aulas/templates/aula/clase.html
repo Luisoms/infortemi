@@ -1,17 +1,16 @@
 {% extends "base.html" %}
 {% load static %}
-{% block title %}Clase {{ clase.nombre }}{% endblock %}
+{% block title %}Clase {{ clase.titulo }}{% endblock %}
 {% block content %}
 <main>
     <div class="container-fluid px-4">
-        <h1 class="mt-4">{{ clase.nombre|capfirst }}</h1>
+        <h1 class="mt-4">{{ clase.titulo|capfirst }}</h1>
         <ol class="breadcrumb mb-4">
-            <li class="breadcrumb-item"><a href="{% url 'inicio' %}">Aula</a></li>
-            <li class="breadcrumb-item active">{{ nivel.nombre }}</li>
+            <li class="breadcrumb-item text-secondary">Aula</li>
         </ol>
         <div class="card mb-4">
             {% comment %}1 ACOMODAR EL ROW SE VE LINEA ABAJO{% endcomment %}
-            <div class="card-header row">
+            <div class="card-header">
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
                         <i class="fas fa-table me-2"></i>Clase {{ clase.id }}
@@ -38,14 +37,9 @@
         {% if clase.video %}
         <div class="row">
             <div class="col-12 d-flex justify-content-center align-items-center bg-dark">
-                {% comment %}
-                <video width="800" height="600" controls>
+                <video width="560" height="315" controls>
                     <source src="{{ clase.video.url }} " type="video/mp4">                    
                 </video>
-                {% endcomment %}
-                <iframe width="560" height="315" src="{{ clase.video }}"
-                title="{{ clase.nombre|title }}" frameborder="0" 
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </div>
         </div>
         {% else %}
@@ -57,10 +51,10 @@
         {% endif %}
         <div class="row d-flex justify-content-center align-items-center flex-row">
             <div class="col-3">
-                {% if clase.id is nivel.clases.first.id %}
+                {% if not clase_pre %}
                 <a href="#" class="btn btn-lg btn-outline-secondary disabled">
                 {% else %}
-                <a href="{% url 'clase' clasePrevia %}" class="btn btn-lg btn-primary">
+                <a href="{% url 'clase' nivel.slug clase_pre %}" class="btn btn-lg btn-primary">
                 {% endif %}
                 <i class="fa fa-arrow-left"></i></a>
             </div>
@@ -75,10 +69,10 @@
                 </p>
             </div>
             <div class="col-3 d-flex justify-content-end">
-                {% if clase.id is nivel.clases.last.id %}
+                {% if not clase_pos %}
                 <a href="#" class="btn btn-lg btn-outline-secondary disabled">
                 {% else %}
-                <a href="{% url 'clase' clasePosterior %}" class="btn btn-lg btn-primary">
+                <a href="{% url 'clase' nivel.slug clase_pos %}" class="btn btn-lg btn-primary">
                 {% endif %}
                 <i class="fa fa-arrow-right"></i></a>
             </div>

@@ -25,7 +25,7 @@ def registro(request):
 def inicio(request):
     usuario = request.user
     messages.info(request, f"Ultima conexción: {usuario.last_login.strftime('%a %d de %m, a las %H:%M')}")
-               
+        
     return render(request, "index.html")
 
 @login_required(redirect_field_name='')
@@ -43,25 +43,27 @@ def opciones(request):
 """
 
 @login_required(redirect_field_name='')
-def clase(request, id):
-    clase = get_object_or_404(Clase, id=id)
-    nivel = Nivel.objects.filter(clases=clase)
-    
-
-    
+def clase(request, slug, id):
+    clase = get_object_or_404(Clase, id=id)   
+    nivel = get_object_or_404(Nivel, slug=slug)    
     ctx = {
-        #"form": ClaseForm(instance=clase),
         "clase": clase,
-        "nivel": nivel[0],
+        "nivel": nivel,
     }
     
-    if clase.id > 1:
-        clasePrevia = clase.id - 1
-        ctx["clasePrevia"] = clasePrevia
+    clases = Clase.objects.filter(nivel=nivel)
+    pks = []
+    for c in clases:
+        pks.append(c.pk)
+    
+    if pks.index(clase.id) != 0:
+        clase_pre = pks.index(clase.id) - 1 
+        ctx["clase_pre"] = pks[clase_pre]
         
-    if clase != nivel.last:
-        clasePosterior = clase.id + 1
-        ctx["clasePosterior"] = clasePosterior
+    if pks.index(clase.id) != len(pks) - 1:
+        clase_pos = pks.index(clase.id) + 1
+        ctx["clase_pos"] = pks[clase_pos]
+    
         
     if request.POST:
         

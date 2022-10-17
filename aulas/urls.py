@@ -12,5 +12,5 @@ urlpatterns = [
     path('opciones/', views.opciones, name="opciones"),
     
     #2 AULAS URLS
-    path('clase/<id>/', views.clase, name="clase"),
+    path('<slug:slug>/<int:id>/', views.clase, name="clase"),
 ]
